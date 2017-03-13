@@ -1,11 +1,17 @@
 -- | A library to do stuff.
 module Lib
     (
-      ourAdd
+      main
     ) where
 
--- | Add two 'Int' values.
-ourAdd :: Int  -- ^ left
-       -> Int  -- ^ right
-       -> Int  -- ^ sum
-ourAdd x y = x + y
+import qualified Config as C
+import qualified Master as M
+import qualified User as U
+
+main :: IO ()
+main = do
+  isMaster <- C.isMaster
+  if isMaster
+  then M.main
+  else U.main
+  

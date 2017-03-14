@@ -1,0 +1,19 @@
+
+
+-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+TzuBox
+
+x first config files
+    - master node ip
+    x if not present =>  we are master
+
+o second configuration file
+    - paths to the directories to be stored on the cloud , path = , could be linked to a .tzuboxignore file with regex of files to be ignored
+    - path to the directory where the server should backup, backup_path = 
+    - I have not thought about symbolic links, I think they should be treated as real directories => be careful to cycles then
+- path could be private or public, in which case they are shared among users, maybe in a second time
+
+
+- when to check for file : date of modification, where of modification, instead of md5 which can be long
+- danger if two files are modified at the same time, or repeatedly at the same time of synchronization ==> MESS, corner case, but may happen 
+

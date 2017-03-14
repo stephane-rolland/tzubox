@@ -16,7 +16,7 @@ tested-with:         GHC == 7.10.2
 
 library
   default-language:    Haskell2010
-  ghc-options:         -Wall
+  ghc-options:         -Wall 
   hs-source-dirs:      src
   exposed-modules:     Lib
   build-depends:       base >= 4.7 && < 5
@@ -24,6 +24,8 @@ library
   other-modules:       Config
                      , Master
                      , User
+                     , UserConfig
+  extensions:          LambdaCase
 
 executable tzubox
   default-language:    Haskell2010

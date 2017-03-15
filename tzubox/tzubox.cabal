@@ -22,8 +22,14 @@ library
                     ,  Config
   build-depends:       base >= 4.7 && < 5
                      , directory
+                     , network
+                     , timers >= 0.2.0.3
+                     , suspend
   other-modules:       Master
                      , User
+                     , Command
+                     , MasterNetwork
+                     , UserNetwork
   extensions:          LambdaCase
                      , DuplicateRecordFields
                      , TransformListComp

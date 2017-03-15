@@ -1,5 +1,8 @@
 module Master where
 
+import qualified Config as C
 
 main :: IO ()
-main = undefined
+main = do
+  masterConfig <- C.readMasterConfig
+  putStrLn $ show masterConfig

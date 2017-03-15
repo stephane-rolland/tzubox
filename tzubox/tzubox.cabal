@@ -26,6 +26,8 @@ library
                      , User
                      , UserConfig
   extensions:          LambdaCase
+                     , DuplicateRecordFields
+                     , TransformListComp
 
 executable tzubox
   default-language:    Haskell2010

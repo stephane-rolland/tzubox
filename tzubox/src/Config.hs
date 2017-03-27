@@ -1,9 +1,13 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Config where
 
 import qualified System.Directory as SD
 import qualified System.IO as SIO
 import qualified Data.List as DL
 import qualified Data.Maybe as DM
+
+import Control.Lens
 
 pathConfigMaster :: String
 pathConfigMaster = "/home/code/src/tzubox/simul/master/.master.cfg"
@@ -39,6 +43,10 @@ data MasterConfig = MasterConfig
   {
      _backupPath :: Path
   } deriving (Show,Read,Eq)
+
+makeLenses ''Path
+makeLenses ''UserConfig
+makeLenses ''MasterConfig
 
 
 isMaster :: IO (Bool)

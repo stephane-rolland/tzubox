@@ -25,14 +25,22 @@ library
                      , network
                      , timers >= 0.2.0.3
                      , suspend
+                     , lens
+                     , unix
+                     , system-filepath
+                     , Command
   other-modules:       Master
                      , User
                      , Command
                      , MasterNetwork
                      , UserNetwork
+                     , FileInfo
   extensions:          LambdaCase
                      , DuplicateRecordFields
                      , TransformListComp
+                     , TupleSections
+                     , RecordWildCards
+                     , NamedFieldPuns
 
 executable tzubox
   default-language:    Haskell2010

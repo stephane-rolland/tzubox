@@ -3,8 +3,8 @@
 module FileInfo where
 import qualified Config as C
 --import qualified System.Posix.Time as SPT
-import qualified System.Posix.Types as SPTy
-import qualified System.Posix.Files as SPF
+--import qualified System.Posix.Types as SPTy
+--import qualified System.Posix.Files as SPF
 --import qualified System.Directory as SD
 --import qualified Filesystem.Path as FP
 -- import qualified System.Path as SP
@@ -27,12 +27,10 @@ makeLenses ''FileInfo
 
 type FileInfos = [FileInfo]
 
-getFilesInfos :: C.UserConfig -> IO FileInfos
-getFilesInfos uc = do
+getFilesInfos :: C.Paths -> IO FileInfos
+getFilesInfos dirs = do
   fileInfos <- CM.mapM getFileInfosForDirectory dirs
   return $ concat $ fileInfos
-  where
-    dirs = view C.paths uc
 
 getFileInfosForDirectory :: C.Path -> IO FileInfos
 getFileInfosForDirectory pth = do
@@ -79,14 +77,14 @@ parseLsContentAndGetStats lsContent dirpath = do
     filepaths = parseLsContent lsContent
  
 parseLsContent :: String -> [String]
-parseLsContent cnt = filter pred fs
+parseLsContent cnt = filter predicate fs
   where
     ls = lines cnt
     fs = map parseLsLine ls
-    pred ""   = False
-    pred "."  = False
-    pred ".." = False
-    pred _ = True
+    predicate ""   = False
+    predicate "."  = False
+    predicate ".." = False
+    predicate _ = True
 
 parseLsLine :: String -> String
 parseLsLine l = if length ws <= 2 then ""

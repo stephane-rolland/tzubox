@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-
+{-# LANGUAGE DeriveGeneric #-}
 module FileInfo where
 import qualified Config as C
 --import qualified System.Posix.Time as SPT
@@ -15,15 +15,21 @@ import qualified Control.Monad as CM
 import Control.Lens
 import Data.List as DL
 
+import Data.Binary
+import GHC.Generics (Generic)
+
 data FileInfo = FileInfo
   {
       _configPath :: String 
     , _filePath :: String
     , _modifyTime :: String
     , _changeTime :: String
-  } deriving (Show,Read)
+  } deriving (Show,Read,Generic)
 
 makeLenses ''FileInfo
+
+instance Binary FileInfo
+
 
 type FileInfos = [FileInfo]
 

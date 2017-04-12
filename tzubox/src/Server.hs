@@ -4,17 +4,17 @@ module Server where
 import Pipes 
 import qualified Pipes.Binary as PipesBinary
 import qualified Pipes.Network.TCP as PNT
-import qualified Command as C
+import qualified Message as M
 import qualified Pipes.Parse as PP
 import qualified Pipes.Prelude as PipesPrelude
 
 pageSize :: Int
 pageSize = 4096
 
-sideffectHandler :: MonadIO m => C.Command -> m C.Command
+sideffectHandler :: MonadIO m => M.Message -> m M.Message
 sideffectHandler c = do
   liftIO $ putStrLn $ "received message = " ++ (show c)
-  return $ C.DoSomething 0
+  return $ M.MasterMsg $ M.AskAllFileInfos
 
 main :: IO ()
 main = PNT.serve (PNT.Host "127.0.0.1") "23456" $

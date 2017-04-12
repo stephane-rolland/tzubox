@@ -6,17 +6,17 @@ import qualified Pipes.Binary as PipesBinary
 import qualified Pipes.Network.TCP as PNT
 import qualified Pipes.Prelude as PipesPrelude
 import qualified Pipes.Parse as PP
-import qualified Command as C
+import qualified Message as M
 --import qualified Network.Simple.TCP as NST
 --import qualified Data.Binary as DB
 
 pageSize :: Int
 pageSize = 4096
 
-sideffectHandler :: MonadIO m => C.Command -> m C.Command
+sideffectHandler :: MonadIO m => M.Message -> m M.Message
 sideffectHandler c = do
   liftIO $ putStrLn $ "received = " ++ (show c)
-  return C.DoNothing
+  return $ M.UserMsg $ M.EmptyMessage 
 
 main :: String -> IO ()
 main ip = PNT.connect ip "23456" $
@@ -32,6 +32,6 @@ main ip = PNT.connect ip "23456" $
 sendFirstMessage :: PNT.Socket -> IO ()
 sendFirstMessage s = do
   _ <- runEffect $ do
-    let encodedProducer = PipesBinary.encode C.FirstMessage 
+    let encodedProducer = PipesBinary.encode $ M.UserMsg $ M.FirstMessage "code" 
     encodedProducer >-> PNT.toSocket s  
   return ()

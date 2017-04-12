@@ -10,3 +10,4 @@ drafts/
 *.hs~
 *.#*
 draft_tzubox
+*.old

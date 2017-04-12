@@ -4,6 +4,10 @@ packages:
 - '.'
 extra-deps:
 - Command-0.0.7
+- pipes-4.1.9
+- pipes-binary-0.4.1
+- pipes-network-0.6.4.1
+- pipes-safe-2.2.4
 - suspend-0.2.0.0
 - timers-0.2.0.3
 resolver: lts-8.5

@@ -29,11 +29,16 @@ library
                      , unix
                      , system-filepath
                      , Command
+                     , binary
+                    ,  pipes
+                    ,  pipes-network
+                    ,  pipes-binary
+                    ,  pipes-parse
   other-modules:       Master
                      , User
                      , Command
-                     , MasterNetwork
-                     , UserNetwork
+                     , Server
+                     , Client
                      , FileInfo
   extensions:          LambdaCase
                      , DuplicateRecordFields
@@ -41,6 +46,7 @@ library
                      , TupleSections
                      , RecordWildCards
                      , NamedFieldPuns
+                     , DeriveGeneric
 
 executable tzubox
   default-language:    Haskell2010

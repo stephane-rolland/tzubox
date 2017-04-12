@@ -1,7 +1,7 @@
 module Master where
 
 import qualified Config as C
-import qualified MasterNetwork as MN
+import qualified Server
 import qualified FileInfo as F
 
 import Control.Lens
@@ -17,5 +17,5 @@ main = do
   putStrLn $ show fileInfos
 
   -- awaits connection from clients
-  MN.main
+  Server.main
   

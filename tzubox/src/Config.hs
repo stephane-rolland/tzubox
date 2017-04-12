@@ -47,7 +47,7 @@ data MasterConfig = MasterConfig
 makeLenses ''Path
 makeLenses ''UserConfig
 makeLenses ''MasterConfig
-
+makeLenses ''MasterIp
 
 isMaster :: IO (Bool)
 isMaster = do
@@ -76,9 +76,9 @@ parseMaster [] = error "The master configuration file is empty"
 parseMaster ss = mkMasterConfig $ DM.catMaybes $ map parseLine ss
 
 mkUserConfig :: [Parsed] -> UserConfig
-mkUserConfig prs = UserConfig ip ps
+mkUserConfig prs = UserConfig i ps
   where
-    (ParsedMasterIp ip) = head $ filter (\case ParsedMasterIp _ -> True; _ -> False) prs 
+    (ParsedMasterIp i) = head $ filter (\case ParsedMasterIp _ -> True; _ -> False) prs 
     ps = foldr reducer [] prs
 
     reducer :: Parsed -> Paths -> Paths

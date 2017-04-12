@@ -2,9 +2,12 @@
 {-# LANGUAGE DeriveGeneric #-}
 module Message where
 import Data.Binary
+import Data.Binary.Orphans()
 import GHC.Generics (Generic)
 
 import qualified FileInfo as FI
+import qualified Data.Time.Clock as DTC
+
 
 data Message = UserMsg UserMessage
                | MasterMsg MasterMessage
@@ -15,11 +18,13 @@ type UserName = String
 data UserMessage =
   EmptyMessage
   | FirstMessage UserName  
+  | AnswerTimeNow DTC.UTCTime
   | AnswerFileInfos UserName FI.FileInfos 
   deriving(Show,Generic)
 
 data MasterMessage = 
-  AskAllFileInfos
+  AskTimeNow 
+  | AskAllFileInfos
   deriving(Show,Generic)
 
 

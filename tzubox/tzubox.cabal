@@ -30,16 +30,21 @@ library
                      , system-filepath
                      , Command
                      , binary
+                     , binary-orphans
                     ,  pipes
                     ,  pipes-network
                     ,  pipes-binary
                     ,  pipes-parse
+                    ,  time
+                    , type-operators
   other-modules:       Master
                      , User
                      , Message
                      , Server
                      , Client
                      , FileInfo
+                     , MasterAsk
+                     , UserAnswer
   extensions:          LambdaCase
                      , DuplicateRecordFields
                      , TransformListComp
@@ -47,6 +52,7 @@ library
                      , RecordWildCards
                      , NamedFieldPuns
                      , DeriveGeneric
+                     , TypeOperators
 
 executable tzubox
   default-language:    Haskell2010

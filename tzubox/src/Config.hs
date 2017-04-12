@@ -23,6 +23,7 @@ data Path = Path
 data Parsed =   ParsedPath Path
               | ParsedMasterIp MasterIp
               | ParsedBackupPath Path
+              | ParsedUserName String
               deriving (Show,Read,Eq)
 
 type Paths = [Path]
@@ -35,7 +36,8 @@ data MasterIp = MasterIp
 
 data UserConfig = UserConfig
   {
-      _masterip :: MasterIp
+      _username :: String
+    , _masterip :: MasterIp
     , _paths :: Paths
   } deriving (Show,Read,Eq)
 
@@ -76,9 +78,10 @@ parseMaster [] = error "The master configuration file is empty"
 parseMaster ss = mkMasterConfig $ DM.catMaybes $ map parseLine ss
 
 mkUserConfig :: [Parsed] -> UserConfig
-mkUserConfig prs = UserConfig i ps
+mkUserConfig prs = UserConfig userName i ps
   where
-    (ParsedMasterIp i) = head $ filter (\case ParsedMasterIp _ -> True; _ -> False) prs 
+    (ParsedMasterIp i) = head $ filter (\case ParsedMasterIp _ -> True; _ -> False) prs
+    (ParsedUserName userName) = head $ filter (\case ParsedUserName _ -> True; _ -> False) prs 
     ps = foldr reducer [] prs
 
     reducer :: Parsed -> Paths -> Paths
@@ -100,5 +103,6 @@ parseLine s = maybeUserConfig
     parseWords ("path" : "=" : args) = Just $ ParsedPath $ Path $ DL.intercalate " " args
     parseWords ("masterip" : "=" : args) = Just $ ParsedMasterIp $ MasterIp $ DL.intercalate " " args
     parseWords ("backup-path" : "=" : args) = Just $ ParsedBackupPath $ Path $ DL.intercalate " " args
+    parseWords ("username" : "=" : args ) = Just $ ParsedUserName $ DL.intercalate " " args
     parseWords args = error $ "could not find path = in " ++ (DL.intercalate " " args)
     

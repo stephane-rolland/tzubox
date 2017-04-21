@@ -12,7 +12,7 @@ main = do
   masterConfig <- C.readMasterConfig
 
   let d = view C.backupPath masterConfig 
-  fileInfos <- F.getFilesInfos [d]
+  fileInfos <- F.getFileInfos [d]
 
   putStrLn $ show fileInfos
 

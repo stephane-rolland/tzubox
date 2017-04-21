@@ -33,8 +33,8 @@ instance Binary FileInfo
 
 type FileInfos = [FileInfo]
 
-getFilesInfos :: C.Paths -> IO FileInfos
-getFilesInfos dirs = do
+getFileInfos :: C.Paths -> IO FileInfos
+getFileInfos dirs = do
   fileInfos <- CM.mapM getFileInfosForDirectory dirs
   return $ concat $ fileInfos
 

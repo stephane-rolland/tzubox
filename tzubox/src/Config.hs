@@ -51,18 +51,18 @@ makeLenses ''UserConfig
 makeLenses ''MasterConfig
 makeLenses ''MasterIp
 
-isMaster :: IO (Bool)
+isMaster :: IO Bool
 isMaster = do
   isFileExists <- SD.doesFileExist pathConfigMaster
   return isFileExists
   
-readUserConfig :: IO (UserConfig)
+readUserConfig :: IO UserConfig
 readUserConfig = do
   allLines <- SIO.readFile pathConfigUser
   let userConfig = parseUser $ lines $ allLines 
   return userConfig
 
-readMasterConfig :: IO (MasterConfig)
+readMasterConfig :: IO MasterConfig
 readMasterConfig = do
   allLines <- SIO.readFile pathConfigMaster
   let masterConfig = parseMaster $ lines $ allLines
@@ -106,3 +106,4 @@ parseLine s = maybeUserConfig
     parseWords ("username" : "=" : args ) = Just $ ParsedUserName $ DL.intercalate " " args
     parseWords args = error $ "could not find path = in " ++ (DL.intercalate " " args)
     
+

@@ -16,15 +16,18 @@ data Message = UserMsg UserMessage
 type UserName = String
 
 data UserMessage =
-  EmptyMessage
-  | FirstMessage UserName  
-  | AnswerTimeNow DTC.UTCTime
-  | AnswerFileInfos UserName FI.FileInfos 
+  FirstMessage UserName  
+  | AnswerTimeNow UserName DTC.UTCTime
+  | AnswerFileInfos UserName DTC.UTCTime FI.FileInfos 
   deriving(Show,Generic)
 
 data MasterMessage = 
   AskTimeNow 
   | AskAllFileInfos
+  | AskUserUpdateFile FI.FileInfo
+  | AskMasterUpdateFile FI.FileInfo
+  | AskUserDeleteFile FI.FileInfo
+  | AskWaitSomeTimeBeforeNextSynchro
   deriving(Show,Generic)
 
 

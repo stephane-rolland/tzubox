@@ -2,7 +2,7 @@ module User where
 
 import qualified Config as C
 import qualified Client
-import qualified FileInfo as F
+
 
 import Control.Lens
 
@@ -23,14 +23,4 @@ getMasterIp = do
   return ip
 
 
-getFileInfos :: IO F.FileInfos
-getFileInfos = do
-  userConfig <- C.readUserConfig
-
-  let dirs = view C.paths userConfig
-  fileInfos <- F.getFilesInfos dirs
-  
-  putStrLn $ show fileInfos
-
-  return fileInfos
   

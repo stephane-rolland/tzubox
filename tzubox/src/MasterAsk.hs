@@ -41,6 +41,8 @@ askAfter (AnswerTimeNow uname t) = do
   return AskAllFileInfos
 askAfter (AnswerFileInfos uname t fileInfos) = do
   lastSynchroTime <- getLastSynchroTime uname
+  checkUserBackupDirectory uname
+  putStrLn $ "last synchro was at = " ++ (show lastSynchroTime)
   (ufsUpdate, ufsDelete, mfsUpdate, mfsDelete) <- getFileUpdatesToDo uname t fileInfos lastSynchroTime
   -- don't delete files for the moment
   let listUfUpdate = take 1 ufsUpdate
@@ -53,7 +55,14 @@ askAfter (AnswerFileInfos uname t fileInfos) = do
          
   return $ msg
 
+-- check the user backup directory exists, and creates it if not
+checkUserBackupDirectory :: UserName -> IO ()
+checkUserBackupDirectory uname = do
+  dirpath <- getUserFilesPath uname
+  SD.createDirectoryIfMissing True dirpath
+  
 
+-- TODO, this should be searching for the most recent file, not the .synchro file
 getLastSynchroTime :: UserName -> IO $ Maybe $ Time
 getLastSynchroTime uname = do
   dirpath <- getUserFilesPath uname
@@ -98,9 +107,11 @@ getFileUpdatesToDo :: String -> Time -> Files -> Maybe Time -> IO FileUpdates
 getFileUpdatesToDo uname uTime uFileInfos lastSynchroTime = do
   userFilesPath <- getUserFilesPath uname
   let pth = C.Path $ userFilesPath 
+  putStrLn $ "retrieving current files on master in path = " ++ (show pth)
   masterFileInfos <- FI.getFileInfos [pth]
+  putStrLn $ "current files on master are = " ++ (show masterFileInfos)
 
-  -- depending on modify and change time => select which files are to be updated or deleted
+  -- depending on modify/change time => select which files are to be updated or deleted
   let ufsUpdate = getUserFilesUpdate uTime uFileInfos lastSynchroTime masterFileInfos userFilesPath
   let mfsUpdate = [] -- getMasterFilesUpdate uTime uFileInfos lastSynchroTime masterFileInfos userFilesPath
   let ufsDelete = [] -- getUserFilesDelete uTime uFileInfos lastSynchroTime masterFileInfos userFilesPath
@@ -133,17 +144,17 @@ getUserFilesUpdate uTime uFiles lastSynchroTime mFiles userFilesPath = filter pr
 getMasterFilesUpdate :: Time -> Files -> Maybe Time -> Files -> String -> Files
 getMasterFilesUpdate uTime uFiles lastSynchroTime mFiles userFilesPath = filter pred mFiles
   where
-    pred mfi = undefined -- sieve mfi lastSynchroTime uFiles
+    pred mfi = False
 
 getUserFilesDelete :: Time -> Files -> Maybe Time -> Files -> String -> Files
 getUserFilesDelete uTime uFiles lastSynchroTime mFiles userFilesPath = filter pred uFiles
   where
-    pred ufi = undefined
+    pred ufi = False
 
 getMasterFilesDelete :: Time -> Files -> Maybe Time -> Files -> String -> Files
 getMasterFilesDelete uTime uFiles lastSynchroTime mFiles userFilesPath = filter pred mFiles
   where
-    pred mfi = undefined
+    pred mfi = False
   
 findMasterFileInfo :: String -> Files -> File -> Maybe File
 findMasterFileInfo userFilesPath masterFileInfos uFileInfo = mfi

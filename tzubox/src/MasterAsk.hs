@@ -117,6 +117,12 @@ getFileUpdatesToDo uname uTime uFileInfos lastSynchroTime = do
   let ufsDelete = [] -- getUserFilesDelete uTime uFileInfos lastSynchroTime masterFileInfos userFilesPath
   let mfsDelete = [] -- getMasterFilesDelete uTime uFileInfos lastSynchroTime masterFileInfos userFilesPath
 
+  putStrLn $ "master needs update for = \n" ++
+    "userUpdates = " ++ (show ufsUpdate) -- ++ "\n" ++
+    --"masterUpdates = " ++ (show mfsUpdate) ++ "\n" ++
+    --"userDeletes = " ++ (show ufsDelete) ++ "\n" ++
+    --"masterDeletes = " ++ (show mfsDelete)
+    
   return (ufsUpdate, ufsDelete, mfsUpdate, mfsDelete)
 
 -- TODO take the time delta in account, if ever not the same lag (e.g. online server)  
@@ -136,9 +142,9 @@ getUserFilesUpdate uTime uFiles lastSynchroTime mFiles userFilesPath = filter pr
         predChange :: File -> Bool
         predChange = isUserMoreRecent FI._changeTime lastSynchroTime ufi
         userModificationRecent :: Maybe Bool
-        userModificationRecent = fmap predModif mfi
+        userModificationRecent = case mfi of Nothing -> Just True; _ -> fmap predModif mfi
         userChangeRecent :: Maybe Bool
-        userChangeRecent =  fmap predChange mfi
+        userChangeRecent = case mfi of Nothing -> Just True; _ -> fmap predChange mfi
         res = all ( == Just True ) [userModificationRecent, userChangeRecent]
 
 getMasterFilesUpdate :: Time -> Files -> Maybe Time -> Files -> String -> Files

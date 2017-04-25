@@ -14,7 +14,7 @@ main = do
   let d = view C.backupPath masterConfig 
   fileInfos <- F.getFileInfos [d]
 
-  putStrLn $ show fileInfos
+  putStrLn $ "content of master backup is = " ++ (show fileInfos)
 
   -- awaits connection from clients
   Server.main

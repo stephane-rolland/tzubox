@@ -10,29 +10,36 @@ import Control.Type.Operator
 import Control.Lens
 import qualified FileInfo as F
 
+import qualified Control.Monad as CM
+import qualified FileBinary as FB
+
 sideffectHandler :: CMIO.MonadIO m => Message -> m Message
 sideffectHandler (MasterMsg m) = do
   CMIO.liftIO $ putStrLn $ "received = " ++ (show m)
-  msg <- CMIO.liftIO $ answer m
+  msg <- CMIO.liftIO $ answerFor m
   return $ UserMsg $ msg
 sideffectHandler _ = error "this is not a message meant to be received from master"
 
-answer :: MasterMessage -> IO $ UserMessage
-answer AskTimeNow = do
+answerFor :: MasterMessage -> IO $ UserMessage
+answerFor AskTimeNow = do
   t <- askTimeNow
   cfg <- readUserConfig
   let uname = view username cfg
   let msg = AnswerTimeNow uname t
   return msg
-answer AskAllFileInfos = do
+answerFor AskAllFileInfos = do
   t <- askTimeNow
   cfg <- readUserConfig
   let uname = view username cfg
   fileInfos <- getFileInfos
   let msg = AnswerFileInfos uname t fileInfos
   return msg
-  
-answer _ = error "this message is not yet understood by user, implement it please"
+answerFor (AskUserUpdateFile ls) = do
+  cfg <- readUserConfig
+  let uname = view username cfg
+  fileBinaries <- CM.mapM FB.getFileBinary ls
+  return $ AnswerUserFilesToUpdate uname fileBinaries
+answerFor _ = error "this message is not yet understood by user, implement it please"
 
 
 askTimeNow :: IO DTC.UTCTime

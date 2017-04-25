@@ -36,12 +36,14 @@ library
                     ,  pipes-binary
                     ,  pipes-parse
                     ,  time
+                    ,  bytestring
                     , type-operators
   other-modules:       Master
                      , User
                      , Message
                      , Server
                      , Client
+                     , FileBinary
                      , FileInfo
                      , MasterAsk
                      , UserAnswer

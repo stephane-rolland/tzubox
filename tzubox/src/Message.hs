@@ -6,6 +6,7 @@ import Data.Binary.Orphans()
 import GHC.Generics (Generic)
 
 import qualified FileInfo as FI
+import qualified FileBinary as FB
 import qualified Data.Time.Clock as DTC
 
 
@@ -18,15 +19,16 @@ type UserName = String
 data UserMessage =
   FirstMessage UserName  
   | AnswerTimeNow UserName DTC.UTCTime
-  | AnswerFileInfos UserName DTC.UTCTime FI.FileInfos 
+  | AnswerFileInfos UserName DTC.UTCTime FI.FileInfos
+  | AnswerUserFilesToUpdate UserName FB.FileBinaries
   deriving(Show,Generic)
 
 data MasterMessage = 
   AskTimeNow 
   | AskAllFileInfos
-  | AskUserUpdateFile FI.FileInfo
-  | AskMasterUpdateFile FI.FileInfo
-  | AskUserDeleteFile FI.FileInfo
+  | AskUserUpdateFile FI.FileInfos
+  | AskMasterUpdateFile FB.FileBinaries
+  | AskUserDeleteFile FI.FileInfos
   | AskWaitSomeTimeBeforeNextSynchro
   deriving(Show,Generic)
 

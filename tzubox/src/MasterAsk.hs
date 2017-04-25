@@ -90,8 +90,8 @@ setLastSynchroTime uname = do
 
 getNextUpdateMessage :: Files -> Files -> MasterMessage
 getNextUpdateMessage [] [] = AskWaitSomeTimeBeforeNextSynchro
-getNextUpdateMessage [] (l:ls) = AskMasterUpdateFile l
-getNextUpdateMessage (l:ls) _ = AskUserUpdateFile l
+--getNextUpdateMessage [] ls = AskMasterUpdateFile ls
+getNextUpdateMessage ls _ = AskUserUpdateFile ls
 -- TODO HERE it would be GOOD to choose the oldest files to update first    
 
 getUserFilesPath :: String -> IO String

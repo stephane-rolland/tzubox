@@ -38,6 +38,7 @@ library
                     ,  time
                     ,  bytestring
                     , type-operators
+                    , deepseq
   other-modules:       Master
                      , User
                      , Message
@@ -48,6 +49,7 @@ library
                      , MasterAsk
                      , UserAnswer
   extensions:          LambdaCase
+                     , BangPatterns   
                      , DuplicateRecordFields
                      , TransformListComp
                      , TupleSections

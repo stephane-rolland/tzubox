@@ -13,6 +13,8 @@ import qualified FileInfo as F
 import qualified Control.Monad as CM
 import qualified FileBinary as FB
 
+import qualified Control.DeepSeq as CDS
+
 sideffectHandler :: CMIO.MonadIO m => Message -> m Message
 sideffectHandler (MasterMsg m) = do
   CMIO.liftIO $ putStrLn $ "received = " ++ (show m)
@@ -37,10 +39,12 @@ answerFor AskAllFileInfos = do
 answerFor (AskUserUpdateFile ls) = do
   cfg <- readUserConfig
   let uname = view username cfg
+  putStrLn $ "nb files to retrieve = " ++ (show $ length ls)
   fileBinaries <- CM.mapM FB.getFileBinary ls
-  return $ AnswerUserFilesToUpdate uname fileBinaries
+  let !toSend = fileBinaries `CDS.deepseq` fileBinaries
+  putStrLn $ "ready to send " ++ (show $ length fileBinaries) ++ " binaries = " ++ (show fileBinaries) 
+  return $ AnswerUserFilesToUpdate uname toSend
 answerFor _ = error "this message is not yet understood by user, implement it please"
-
 
 askTimeNow :: IO DTC.UTCTime
 askTimeNow = do

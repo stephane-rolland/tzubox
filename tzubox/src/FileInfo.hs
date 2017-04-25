@@ -16,6 +16,7 @@ import Control.Lens
 import Data.List as DL
 
 import Data.Binary
+import Control.DeepSeq
 import GHC.Generics (Generic)
 
 data FileInfo = FileInfo
@@ -29,7 +30,7 @@ data FileInfo = FileInfo
 makeLenses ''FileInfo
 
 instance Binary FileInfo
-
+instance NFData FileInfo
 
 type FileInfos = [FileInfo]
 

@@ -45,8 +45,8 @@ askAfter (AnswerFileInfos uname t fileInfos) = do
   putStrLn $ "last synchro was at = " ++ (show lastSynchroTime)
   (ufsUpdate, ufsDelete, mfsUpdate, mfsDelete) <- getFileUpdatesToDo uname t fileInfos lastSynchroTime
   -- don't delete files for the moment
-  let listUfUpdate = take 1 ufsUpdate
-  let listMfUpdate = take 1 mfsUpdate
+  let listUfUpdate = ufsUpdate
+  let listMfUpdate = mfsUpdate
   let msg = getNextUpdateMessage listUfUpdate listMfUpdate
   _ <- case msg of
          AskWaitSomeTimeBeforeNextSynchro -> do

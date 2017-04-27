@@ -25,7 +25,7 @@ data FileInfo = FileInfo
     , _filePath :: String
     , _modifyTime :: String
     , _changeTime :: String
-  } deriving (Show,Read,Generic)
+  } deriving (Generic)
 
 makeLenses ''FileInfo
 
@@ -33,6 +33,10 @@ instance Binary FileInfo
 instance NFData FileInfo
 
 type FileInfos = [FileInfo]
+
+instance Show FileInfo where
+  show (FileInfo a b c d) = "FileInfo " ++ (show a) ++ " " ++ (show b) ++ " " ++ (show c) ++ " " ++ (show d) 
+
 
 getFileInfos :: C.Paths -> IO FileInfos
 getFileInfos dirs = do

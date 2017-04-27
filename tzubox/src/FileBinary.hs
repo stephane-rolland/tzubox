@@ -13,13 +13,12 @@ data FileBinary = FileBinary
       _fileInfo :: FileInfo
     , _bytes :: DBS.ByteString
   }
-  deriving (Show,Generic)
+  deriving (Generic)
 
 instance Binary FileBinary
 instance NFData FileBinary
 
 type FileBinaries = [FileBinary]
-
 
 getFileBinary :: FileInfo -> IO FileBinary
 getFileBinary fi = do
@@ -28,3 +27,6 @@ getFileBinary fi = do
   fileByteString <- DBS.readFile entirePath
   putStrLn $ "OK for = " ++ entirePath
   return $ FileBinary fi fileByteString
+
+instance Show FileBinary where
+  show (FileBinary fi byt) = "FileBinary " ++ (show $  quot (DBS.length byt) 1000) ++ " KB - " ++ (show fi)   

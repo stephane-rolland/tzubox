@@ -41,10 +41,9 @@ answerFor (AskUserUpdateFile ls) = do
   let uname = view username cfg
   putStrLn $ "nb files to retrieve = " ++ (show $ length ls)
   fileBinaries <- CM.mapM FB.getFileBinary ls
-  let !toSend = fileBinaries `CDS.deepseq` fileBinaries
   putStrLn $ "ready to send " ++ (show $ length fileBinaries) ++ " binaries = " ++ (show fileBinaries) 
-  return $ AnswerUserFilesToUpdate uname toSend
-answerFor _ = error "this message is not yet understood by user, implement it please"
+  return $ AnswerUserFilesToUpdate uname fileBinaries
+answerFor m = error $ "this message is not yet understood by user, implement it please " ++ (show m)
 
 askTimeNow :: IO DTC.UTCTime
 askTimeNow = do

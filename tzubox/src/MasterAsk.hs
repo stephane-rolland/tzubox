@@ -15,6 +15,7 @@ import qualified System.Directory as SD
 import qualified System.IO as SIO
 
 import qualified FileInfo as FI
+import qualified FileBinary as FB
 
 import qualified Data.List as DL
 import qualified Data.Maybe as DM
@@ -54,6 +55,12 @@ askAfter (AnswerFileInfos uname t fileInfos) = do
          _ -> return ()
          
   return $ msg
+askAfter (AnswerUserFilesToUpdate uname fbs) = do
+  updateUserFilesInBackup uname fbs
+  setLastSynchroTime uname
+  return AskWaitSomeTimeBeforeNextSynchro
+  
+askAfter m = error $ "this message is not yet understood by master, implement it please " ++ (show m)
 
 -- check the user backup directory exists, and creates it if not
 checkUserBackupDirectory :: UserName -> IO ()
@@ -192,3 +199,10 @@ parseStringToDate (y1:y2:y3:y4:'-':m1:m2:'-':d1:d2:' ':h1:h2:':':mt1:mt2:':':s1:
     nbSeconds = s + 60 * mt + 3600 * h
     utcTime = DTC.UTCTime {utctDay = day, utctDayTime = DTC.secondsToDiffTime nbSeconds}
 parseStringToDate s = error $ " could not parse date = " ++ s
+
+
+
+
+updateUserFilesInBackup :: UserName -> FB.FileBinaries -> IO ()
+updateUserFilesInBackup uname fbs = do
+  return ()

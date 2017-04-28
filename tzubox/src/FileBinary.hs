@@ -20,8 +20,8 @@ instance NFData FileBinary
 
 type FileBinaries = [FileBinary]
 
-getFileBinary :: FileInfo -> IO FileBinary
-getFileBinary fi = do
+getUserFileBinary :: FileInfo -> IO FileBinary
+getUserFileBinary fi = do
   let entirePath = (view configPath fi) ++ "/" ++ (view filePath fi)
   putStrLn $ "retrieve bytes for file = " ++ entirePath
   fileByteString <- DBS.readFile entirePath

@@ -57,6 +57,7 @@ getFileInfosForDirectory pth = do
   where
     dirpath = view C.directory pth
 
+
 getStatForFile :: String -> String -> IO FileInfo
 getStatForFile configpath filepath = do
   (_, Just hout, _, _) <- SC.createProcess (SC.proc cmd args) { SC.cwd = Just configpath,
@@ -69,7 +70,6 @@ getStatForFile configpath filepath = do
     cmd = "stat"
     args = [filepath]
 
-
 parseStatContent :: String -> (String,String)
 parseStatContent content = (modTime, chgTime)
   where
@@ -79,7 +79,6 @@ parseStatContent content = (modTime, chgTime)
     modTime = drop 8 modTimeLine
     chgTime = drop 8 chgTimeLine
 
-  
 parseLsContentAndGetStats :: String -> String -> IO FileInfos
 parseLsContentAndGetStats lsContent dirpath = do
   filesInfos <- CM.mapM (getStatForFile dirpath) filepaths 
@@ -92,15 +91,19 @@ parseLsContent cnt = filter predicate fs
   where
     ls = lines cnt
     fs = map parseLsLine ls
-    predicate ""   = False
-    predicate "."  = False
-    predicate ".." = False
-    predicate _ = True
+    predicate ""      = False
+    predicate "."     = False
+    predicate ".."    = False
+    predicate _       = True
 
 parseLsLine :: String -> String
 parseLsLine l = if length ws <= 2 then ""
                 else filepath
   where
     ws = words l
-    filepath = DL.intercalate " " $ drop 8 ws
+    isDirectory = 'd' == (head $ ws !! 0)
+    filepath = if isDirectory
+               then "" -- ignore directories in the ls -lRa result
+               else DL.intercalate " " $ drop 8 ws
   
+

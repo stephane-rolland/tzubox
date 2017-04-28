@@ -2,7 +2,7 @@ module Master where
 
 import qualified Config as C
 import qualified Server
-import qualified FileInfo as F
+import qualified FileInfo as FI
 
 import Control.Lens
 
@@ -12,7 +12,7 @@ main = do
   masterConfig <- C.readMasterConfig
 
   let d = view C.backupPath masterConfig 
-  fileInfos <- F.getFileInfos [d]
+  fileInfos <- FI.getFileInfos [d]
 
   putStrLn $ "content of master backup is = " ++ (show fileInfos)
 

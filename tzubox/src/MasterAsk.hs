@@ -8,6 +8,7 @@ import qualified Data.Time.Calendar as DTCA
 
 import Control.Type.Operator
 import Control.Lens
+import qualified Control.Monad as CM
 
 import qualified Config as C
 
@@ -19,7 +20,9 @@ import qualified FileBinary as FB
 
 import qualified Data.List as DL
 import qualified Data.Maybe as DM
+import qualified Data.ByteString as DBS
 
+import System.FilePath.Posix as SFPP
 
 type Time = DTC.UTCTime
 type File = FI.FileInfo
@@ -53,7 +56,6 @@ askAfter (AnswerFileInfos uname t fileInfos) = do
          AskWaitSomeTimeBeforeNextSynchro -> do
            setLastSynchroTime uname
          _ -> return ()
-         
   return $ msg
 askAfter (AnswerUserFilesToUpdate uname fbs) = do
   updateUserFilesInBackup uname fbs
@@ -200,9 +202,31 @@ parseStringToDate (y1:y2:y3:y4:'-':m1:m2:'-':d1:d2:' ':h1:h2:':':mt1:mt2:':':s1:
     utcTime = DTC.UTCTime {utctDay = day, utctDayTime = DTC.secondsToDiffTime nbSeconds}
 parseStringToDate s = error $ " could not parse date = " ++ s
 
-
-
-
 updateUserFilesInBackup :: UserName -> FB.FileBinaries -> IO ()
 updateUserFilesInBackup uname fbs = do
+  dirpath <- getUserFilesPath uname
+  CM.forM_ fbs (updateUserFile dirpath) 
   return ()
+
+putGreen :: String -> IO () 
+putGreen s =  putStrLn $ "\x1b[32m" ++ s ++ "\x1b[0m" 
+
+putRed :: String -> IO ()
+putRed s =  putStrLn $ "\x1b[31m" ++ s ++ "\x1b[0m"
+
+putBlue :: String -> IO ()
+putBlue s =  putStrLn $ "\x1b[34m" ++ s ++ "\x1b[0m"
+
+updateUserFile :: String -> FB.FileBinary -> IO ()
+updateUserFile pth (FB.FileBinary (FI.FileInfo configPth filePth modif chang) bytes) = do
+  let entirePath = pth ++ configPth ++ "/" ++ filePth
+  isExisting <- SD.doesFileExist entirePath
+  -- create directory file is not exisiting yet
+  CM.when (not isExisting) $ do
+    let dirname = SFPP.takeDirectory entirePath
+    SD.createDirectoryIfMissing True dirname    
+    putGreen $ "created directory = " ++ dirname    
+  -- saves file
+  DBS.writeFile entirePath bytes
+  putGreen $ "file saved = " ++ entirePath
+  -- modifies the modification and change date to be the same as what the user sent

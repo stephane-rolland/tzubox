@@ -40,7 +40,7 @@ answerFor (AskUserUpdateFile ls) = do
   cfg <- readUserConfig
   let uname = view username cfg
   putStrLn $ "nb files to retrieve = " ++ (show $ length ls)
-  fileBinaries <- CM.mapM FB.getFileBinary ls
+  fileBinaries <- CM.mapM FB.getUserFileBinary ls
   putStrLn $ "ready to send " ++ (show $ length fileBinaries) ++ " binaries = " ++ (show fileBinaries) 
   return $ AnswerUserFilesToUpdate uname fileBinaries
 answerFor m = error $ "this message is not yet understood by user, implement it please " ++ (show m)

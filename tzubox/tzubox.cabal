@@ -39,6 +39,7 @@ library
                     ,  bytestring
                     , type-operators
                     , deepseq
+                    , filepath
   other-modules:       Master
                      , User
                      , Message
